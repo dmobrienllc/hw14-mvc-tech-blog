@@ -1,23 +1,22 @@
 const loginFormHandler = async (event) => {
   event.preventDefault();
 
-  // Collect values from the login form
   const email = document.querySelector('#email-login').value.trim();
   const password = document.querySelector('#password-login').value.trim();
+  let response;
 
   if (email && password) {
-    // Send a POST request to the API endpoint
-    const response = await fetch('/api/users/login', {
+    response = await fetch('/api/users/login', {
       method: 'POST',
       body: JSON.stringify({ email, password }),
       headers: { 'Content-Type': 'application/json' },
     });
 
     if (response.ok) {
-      // If successful, redirect the browser to the profile page
-      document.location.replace('/profile');
+      document.location.replace('/dashboard');
     } else {
-      alert(response.statusText);
+      //TODO: Put this into a response on the page.
+      console.log(response.statusText);
     }
   }
 };
@@ -25,21 +24,22 @@ const loginFormHandler = async (event) => {
 const signupFormHandler = async (event) => {
   event.preventDefault();
 
-  const name = document.querySelector('#name-signup').value.trim();
+  const user_name = document.querySelector('#name-signup').value.trim();
   const email = document.querySelector('#email-signup').value.trim();
   const password = document.querySelector('#password-signup').value.trim();
 
-  if (name && email && password) {
+  if (user_name && email && password) {
     const response = await fetch('/api/users', {
       method: 'POST',
-      body: JSON.stringify({ name, email, password }),
+      body: JSON.stringify({user_name, email, password }),
       headers: { 'Content-Type': 'application/json' },
     });
 
     if (response.ok) {
-      document.location.replace('/profile');
+      document.location.replace('/dashboard');
     } else {
-      alert(response.statusText);
+      //TODO: Put this into a response on the page.
+      console.log(response.statusText);
     }
   }
 };

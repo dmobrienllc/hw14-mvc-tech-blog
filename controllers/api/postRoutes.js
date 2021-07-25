@@ -1,9 +1,37 @@
 const router = require('express').Router();
-const { Post, Comment, PostComment } = require('../../models');
+const { Post, Comment, PostComment, UserComment, User } = require('../../models');
 
 router.get('/', async (req, res) => {
   try {
-    const postData = await Post.findAll({ include: { all: true } });
+    // User.findAll({
+    //   include: [
+    //     {
+    //       model: Team, 
+    //       include: [
+    //         Folder
+    //       ]  
+    //     }
+    //   ]
+    // });
+
+    //const postData = await Post.findAll({ include: { all: true } });
+    const postData = await Post.findAll({
+      include: [
+        {
+          model: Comment,
+          include: [
+            User
+          ]
+        }
+        // ,
+        //   {
+        //     model: User,
+        //     include: [
+        //       Comment
+        //     ]
+        //   }
+      ]
+    });
     res.json(postData);
   }
   catch (err) {
@@ -13,7 +41,18 @@ router.get('/', async (req, res) => {
 
 router.get('/:id', async (req, res) => {
   try {
-    const postData = await Post.findByPk(req.params.id, { include: { all: true } });
+    const postData = await Post.findByPk(req.params.id, {
+      include: [
+        {
+          model: Comment,
+          include: [
+            User
+          ]
+        }
+      ]
+    });
+    console.log(postData);
+    
     res.json(postData);
   }
   catch (err) {

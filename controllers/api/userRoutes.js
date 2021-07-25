@@ -1,42 +1,72 @@
 const router = require('express').Router();
-const { User,Post } = require('../../models');
+const { User, Post } = require('../../models');
 
 router.get('/', async (req, res) => {
-  const userData = await User.findAll({include:Post}).catch((err) => {
+  const userData = await User.findAll({ include: Post }).catch((err) => {
     res.json(err);
   });
   res.json(userData);
 });
 
 router.get('/:id', async (req, res) => {
-  const productData = await User.findByPk(req.params.id,{include:{all:true}}).catch((err) => {
+  const productData = await User.findByPk(req.params.id, { include: { all: true } }).catch((err) => {
     res.json(err);
   });
   res.json(productData);
 });
 
 router.post('/', async (req, res) => {
+  console.log("Hitting create user");
   try {
     const userData = await User.findOne({ where: { email: req.body.email } });
 
-    if(!userData){
+    if (!userData) {
       userData = await User.create(req.body);
     }
-    
+
     req.session.save(() => {
       req.session.user_id = userData.id;
       req.session.logged_in = true;
 
-      res.status(200).json(userData);
+      const user = userData.get({ plain: true });
+
+      res.status(200).json(user);
+
+      return;
     });
   } catch (err) {
     res.status(400).json(err);
   }
 });
 
+//use for testing with postman
+// router.post('/', async (req,res) => {
+//   try{
+//     const newUserData = await User.create(req.body);
+
+//     req.session.save(() => {
+//       req.session.user_id = userData.id;
+//       req.session.logged_in = true;
+
+//       res.status(200).json(newUserData);
+//         return;
+//     });
+//   }
+//   catch(err){
+//     res.status(400).json(err);
+//   }
+// });
+
 router.post('/login', async (req, res) => {
   try {
-    const userData = await User.findOne({ where: { email: req.body.email } });
+    const userData = await User.findOne({
+      where: {
+        email: req.body.email
+      },
+      include: {
+        all: true
+      }
+    });
 
     if (!userData) {
       res
@@ -57,10 +87,14 @@ router.post('/login', async (req, res) => {
     req.session.save(() => {
       req.session.user_id = userData.id;
       req.session.logged_in = true;
-      
-      res.json({ user: userData, message: 'You are now logged in!' });
-    });
 
+      // res.render('dashboard', { 
+      //   user: userData,  
+      //   message: 'You are now logged in!'
+      // });
+      res.status(200).json(userData);
+
+    });
   } catch (err) {
     res.status(400).json(err);
   }
@@ -74,6 +108,8 @@ router.post('/logout', (req, res) => {
   } else {
     res.status(404).end();
   }
+
+  res.render("/homepage");
 });
 
 module.exports = router;
