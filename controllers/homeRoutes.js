@@ -53,7 +53,6 @@ router.get('/posts/:id', withAuth,async (req, res) => {
         const postData = await Post.findByPk(req.params.id, { include: { all: true } });
 
         const post = postData.get({ plain: true });
-        console.log(post);
 
         res.render('post-detail', {
           post,

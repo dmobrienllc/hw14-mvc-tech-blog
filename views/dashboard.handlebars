@@ -1,48 +1,47 @@
 {{#if user.posts.length}}
 <div class="row mb-4">
   <div class="col-md-12">
-    <h3>Posts for user: {{user.user_name}}</h3>
+    <h3>Welcome {{user.user_name}}!</h3>
   </div>
 </div>
-
-{{#each user.posts as |post| }}
-<div class="row mb-4 post">
-  <div class="col-md-10">
-    <h2>
-      {{{get_emoji}}}
-      <a href="/posts/{{post.id}}">{{post.post_title}}</a>
-    </h2>
-    <p>
-      <span for="img" aria-label="post-body">💲</span>
-      <span class="post-body">{{post.post_body}}</span>
-    </p>
-    <p>Created on {{format_date post.created_at}}</p>
-  </div>
-  <div class="col-md-2">
-    <button class="btn btn-sm btn-danger" >DELETE</button>
-  </div>
-</div>
-
-  {{#each post.comments as |comment|}}
-    <div class="row mb-2">
-      <div class="col-md-8">
-        <h5>
-          {{comment.comment_body}}
-        </h5>
-        <p>Created by need user on {{format_date comment.created_at}}</p>
-      </div>
-      <div class="col-md-4">
-        <button class="btn btn-sm btn-danger" data-comment-id="{{comment.id}}">DELETE</button>
-      </div>
+  {{#each user.posts as |post| }}
+  <div class="row mb-4 post">
+    <div class="col-md-10">
+      <h2>
+        {{{get_emoji}}}
+        <a href="/posts/{{post.id}}">{{post.post_title}}</a>
+      </h2>
+      <p>
+        <span for="img" aria-label="post-body">💲</span>
+        <span class="post-body">{{post.post_body}}</span>
+      </p>
+      <p>Created on {{format_date post.created_at}}</p>
     </div>
-  {{/each}}
-{{/each}}
-{{else}}
-<div class="row mb-4">
-  <div class="col-md-12">
-    <h3>Welcome, {{user.user_name}}! Create a post and start the conversation!</h3>
+    <div class="col-md-2">
+      <button class="btn btn-sm btn-danger delete-post" data-post-id="{{post.id}}">DELETE</button>
+    </div>
   </div>
-</div>
+
+  {{!-- {{#each post.comments as |comment|}}
+  <div class="row mb-2">
+    <div class="col-md-8">
+      <h5>
+        {{comment.comment_body}}
+      </h5>
+      <p>Created by need user on {{format_date comment.created_at}}</p>
+    </div>
+    <div class="col-md-4">
+      <button class="btn btn-sm btn-danger delete-comment" data-comment-id="{{comment.id}}">DELETE</button>
+    </div>
+  </div>
+  {{/each}} --}}
+  {{/each}}
+  {{else}}
+  <div class="row mb-4">
+    <div class="col-md-12">
+      <h3>Welcome, {{user.user_name}}! Create a post and start the conversation!</h3>
+    </div>
+  </div>
 {{/if}}
 
 <div class="row mb-4">

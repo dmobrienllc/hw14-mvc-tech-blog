@@ -37,7 +37,6 @@ router.put('/:id', async (req, res) => {
 router.post('/', async (req, res) => {
   try {
 
-    req.session.user_id = req.body.user_id;
     const newComment = await Comment.create(req.body);
     await PostComment.create({ post_id: req.body.post_id, comment_id: newComment.id });
     await UserComment.create({ user_id: req.session.user_id, comment_id: newComment.id });
@@ -48,15 +47,18 @@ router.post('/', async (req, res) => {
   }
 });
 
-router.delete('/:id', async (req,res) => {
-  try{
+router.delete('/:id', async (req, res) => {
+  console.log("Comment routes, deleting comment: " + req.params.id)
+  try {
     const commentData = await Comment.destroy({
-      where:{
+      where: {
         id: req.params.id
       }
     });
+
+    console.log(JSON.stringify(commentData));
     res.status(200).json(commentData);
-  }catch(err){
+  } catch (err) {
     res.status(500).json(err);
   }
 });

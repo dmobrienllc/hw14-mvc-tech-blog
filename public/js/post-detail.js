@@ -1,9 +1,11 @@
 const newCommentHandler = async (event) => {
   event.preventDefault();
 
-  if (event.target.hasAttribute('data-id')) {
-    const post_id = event.target.getAttribute('data-id');
-    const comment_body = document.querySelector('#comment-text').value.trim();
+  if (event.target.hasAttribute('data-comment-post-id')) {
+    const post_id = event.target.getAttribute('data-comment-post-id');
+    const comment_body = document.querySelector('#comment-body').value.trim();
+
+    console.log(JSON.stringify({ post_id, comment_body }));
 
     if (post_id && comment_body) {
       const response = await fetch(`/api/comments`, {
@@ -14,8 +16,10 @@ const newCommentHandler = async (event) => {
         },
       });
 
-      if (!response.ok) {
-        alert('Failed to create comment');
+      if (response) {
+        document.location.replace('/dashboard');
+      } else {
+        console.log(response.statusText);
       }
     }
   };
@@ -23,7 +27,10 @@ const newCommentHandler = async (event) => {
 
 //Delete comment with passed in id
 const delButtonHandler = async (event) => {
-  console.log("We hit delbutton");
+  var postDivEl = document.querySelector(".post");
+  console.log(postDivEl);
+  const post_id = postDivEl.getAttribute('data-post-id');
+  console.log("Hit delButtonHandler on post-details.js with post id: " + post_id);
 
   if (event.target.hasAttribute('data-id')) {
     const id = event.target.getAttribute('data-id');
@@ -32,14 +39,27 @@ const delButtonHandler = async (event) => {
       method: 'DELETE',
     });
   }
-};
 
-//This won't be the form, you'll have to event delegate
-//get it from the 
-// document
-//   .querySelector('.new-comment-form')
-//   .addEventListener('submit', newFormHandler);
+  if (post_id) {
+    let id = post_id;
+    const updatedPost = await fetch(`/api/posts/${id}`, {
+      method: 'GET',
+      headers: { 'Content-Type': 'application/json' },
+    });
+
+    if (updatedPost) {
+      document.location.replace('/dashboard');
+    } else {
+      console.log(response.statusText);
+    }
+  }
+};
 
 document
   .querySelector('.comment-list')
   .addEventListener('click', delButtonHandler);
+
+document
+  .querySelector('.new-comment-form')
+  .addEventListener('click', newCommentHandler);
+

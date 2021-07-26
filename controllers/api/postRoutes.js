@@ -3,18 +3,7 @@ const { Post, Comment, PostComment, UserComment, User } = require('../../models'
 
 router.get('/', async (req, res) => {
   try {
-    // User.findAll({
-    //   include: [
-    //     {
-    //       model: Team, 
-    //       include: [
-    //         Folder
-    //       ]  
-    //     }
-    //   ]
-    // });
 
-    //const postData = await Post.findAll({ include: { all: true } });
     const postData = await Post.findAll({
       include: [
         {
@@ -23,13 +12,6 @@ router.get('/', async (req, res) => {
             User
           ]
         }
-        // ,
-        //   {
-        //     model: User,
-        //     include: [
-        //       Comment
-        //     ]
-        //   }
       ]
     });
     res.json(postData);
@@ -40,6 +22,7 @@ router.get('/', async (req, res) => {
 });
 
 router.get('/:id', async (req, res) => {
+  console.log("We're hitting GET post/id in postRoutes.js");
   try {
     const postData = await Post.findByPk(req.params.id, {
       include: [
@@ -52,7 +35,7 @@ router.get('/:id', async (req, res) => {
       ]
     });
     console.log(postData);
-    
+
     res.json(postData);
   }
   catch (err) {
