@@ -31,33 +31,14 @@ router.post('/', async (req, res) => {
       const user = userData.get({ plain: true });
 
       res.status(200).json(user);
-
-      return;
     });
   } catch (err) {
     res.status(400).json(err);
   }
 });
 
-//use for testing with postman
-// router.post('/', async (req,res) => {
-//   try{
-//     const newUserData = await User.create(req.body);
-
-//     req.session.save(() => {
-//       req.session.user_id = userData.id;
-//       req.session.logged_in = true;
-
-//       res.status(200).json(newUserData);
-//         return;
-//     });
-//   }
-//   catch(err){
-//     res.status(400).json(err);
-//   }
-// });
-
 router.post('/login', async (req, res) => {
+  console.log("Hitting api/users/login");
   try {
     const userData = await User.findOne({
       where: {
@@ -84,18 +65,18 @@ router.post('/login', async (req, res) => {
       return;
     }
 
+    const user = userData.get({ plain: true });
+
+    console.log(user);
+
     req.session.save(() => {
       req.session.user_id = userData.id;
       req.session.logged_in = true;
 
-      // res.render('dashboard', { 
-      //   user: userData,  
-      //   message: 'You are now logged in!'
-      // });
-      res.status(200).json(userData);
-
+      res.status(200).json(user);
     });
   } catch (err) {
+    console.log(err);
     res.status(400).json(err);
   }
 });

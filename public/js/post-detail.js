@@ -55,9 +55,14 @@ const delButtonHandler = async (event) => {
   }
 };
 
-document
+try{
+  document
   .querySelector('.comment-list')
   .addEventListener('click', delButtonHandler);
+}
+catch(err){
+  console.log("In post-detail.js, handling missing .comment-list");
+}
 
 document
   .querySelector('.new-comment-form')

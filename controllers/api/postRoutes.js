@@ -44,6 +44,7 @@ router.get('/:id', async (req, res) => {
 });
 
 router.post('/', async (req, res) => {
+  console.log("In postRoutes.js, Post.create");
   try {
     const newPost = await Post.create(req.body);
 
