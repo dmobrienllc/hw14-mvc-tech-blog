@@ -1,5 +1,5 @@
 const router = require('express').Router();
-const { User, Post } = require('../models');
+const { User, Post,Comment } = require('../models');
 const withAuth = require('../utils/auth');
 
 router.get('/', async (req, res) => {
@@ -49,8 +49,16 @@ router.get('/homepage', async (req, res) => {
 });
 
 router.get('/posts/:id', withAuth,async (req, res) => {
+    console.log("We're hitting GET post/id in homeRoutes.js");
     try {
-        const postData = await Post.findByPk(req.params.id, { include: { all: true } });
+        const postData = await Post.findByPk(req.params.id, { 
+            include: [{
+              model: Comment,
+              include: [
+                User
+              ]
+            }
+          ]});
 
         const post = postData.get({ plain: true });
 
