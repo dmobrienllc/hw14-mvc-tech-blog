@@ -50,27 +50,6 @@ const deletePostHandler = async (event) => {
     }
 };
 
-// const deleteCommentHandler = async (event) => {
-//     event.preventDefault();
-
-//     if (event.target.hasAttribute('data-comment-id')) {
-//         const id = event.target.getAttribute('data-comment-id');
-
-//         if (id) {
-//             const response = await fetch(`/api/posts/${id}`, {
-//                 method: 'DELETE',
-//                 headers: { 'Content-Type': 'application/json' },
-//             });
-
-//             if (response.ok) {
-//                 document.location.replace('/dashboard');
-//             } else {
-//                 console.log(response.statusText);
-//             }
-//         }
-//     }
-// };
-
 //just don't want this to be unhandled as it crashes the app
 try{
     document
